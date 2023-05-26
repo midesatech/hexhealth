@@ -9,6 +9,7 @@ using MDT.Model.Gateway;
 using MDT.MongoDb.Entities;
 using MDT.UseCase;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace MDT.AppService
 {
@@ -33,8 +34,10 @@ namespace MDT.AppService
             var mongoConn = mongoKey;
             Console.Out.WriteLine(mongoKey + "|"+appSettings.DatabaseMenu);
 
+            services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+            
 
             services.AddScoped<IEmpleadoRepository>(provider =>
              new EmpleadoAdapter(mongoConn, $"{appSettings.DatabaseMenu}")
@@ -69,27 +72,28 @@ namespace MDT.AppService
 
 
             
-            services.AddMvcCore().AddApiExplorer();
+            services.AddMvcCore()
+                .AddApiExplorer();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
+            //if (env.IsDevelopment())
+            //{
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI();
-            }
-            else
-            {
+            //}
+            //else
+            //{
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
-            }
+            //}
 
             app.UseCors(MyAllowSpecificOrigins);
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
             

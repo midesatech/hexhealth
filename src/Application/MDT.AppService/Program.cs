@@ -1,24 +1,20 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+﻿using MDT.AppService;
+using Microsoft.AspNetCore.Builder;
 
-namespace MDT.AppService
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            string myarg = string.Empty;
-            if (args.Length>0)
-            {
-                myarg = args[0];
-            }
-            CreateWebHostBuilder(args)                
-                .Build()
-                .Run();
-        }
+var builder = WebApplication.CreateBuilder(args);
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
-    }
-}
+// CREATE STARTUP INSTANCE
+var startup = new Startup(builder.Configuration);
+
+// CONFIGURE SERVICES 
+startup.ConfigureServices(builder.Services);
+// Add services to the container.
+
+
+var app = builder.Build();
+
+/* CONFIGURE LIFETIME */
+startup.Configure(app, app.Environment);
+
+app.MapControllers();
+app.Run();
