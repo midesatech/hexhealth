@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  <ProjectGuid>{b37b5b9d-4d9a-48c2-868d-9ed1fbe36429}</ProjectGuid>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="12.1.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />  
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\DrivenAdapter\MDT.MongoDb\MDT.MongoDb.csproj" />
+    <ProjectReference Include="..\..\..\Domain\MDT.Model\MDT.Model.csproj" />
+    <ProjectReference Include="..\..\..\Domain\MDT.UseCase\MDT.UseCase.csproj" />
+  </ItemGroup>
+
+  
+
+</Project>

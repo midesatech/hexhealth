@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+      <ProjectGuid>{d018fa0f-a233-4faf-b14f-d09778d9eb41}</ProjectGuid>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MDT.Model\MDT.Model.csproj" />
+  </ItemGroup>
+
+</Project>
