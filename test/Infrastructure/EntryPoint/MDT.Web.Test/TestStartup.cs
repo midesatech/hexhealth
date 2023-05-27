@@ -57,7 +57,7 @@ namespace MDT.Web.Test
                 });
             });
 
-            services.AddTransient<HomeController>();
+            //services.AddTransient<HomeController>();
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;

@@ -7,9 +7,12 @@ using Microsoft.Extensions.DependencyInjection;
 using MDT.Model.Data;
 using MDT.Model.Gateway;
 using MDT.MongoDb.Entities;
+using MDT.SupabaseDb.Entities;
 using MDT.UseCase;
+using MDT.UseCase.Goals;
 using System;
 using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace MDT.AppService
 {
@@ -32,7 +35,13 @@ namespace MDT.AppService
             var appSettings = Configuration.GetSection("AppSettings").Get<TPMenuAppSetings>();
             var mongoKey = appSettings.TPMenuDatabaseString;
             var mongoConn = mongoKey;
-            Console.Out.WriteLine(mongoKey + "|"+appSettings.DatabaseMenu);
+            var supabaseSettings = Configuration.GetSection("SupabaseSettings").Get<SupabaseSettings>();
+            var supaApiKey = supabaseSettings.ApiKey;
+            var supaUrl = supabaseSettings.Url;
+
+            Console.Out.WriteLine(mongoKey + "|" + appSettings.DatabaseMenu);
+
+            services.AddSingleton(provider => new Supabase.Client(supaUrl, supaApiKey));
 
             services.AddControllers();
             services.AddEndpointsApiExplorer();
@@ -43,14 +52,11 @@ namespace MDT.AppService
              new EmpleadoAdapter(mongoConn, $"{appSettings.DatabaseMenu}")
             );
 
-            services.BuildServiceProvider().GetService<IEmpleadoRepository>();
-            services.AddTransient<HomeUseCase>();
+            services.AddSingleton<IGoalRepository, GoalAdapter>();
 
             var servicesProvider = services.BuildServiceProvider();
 
-            services.AddTransient<HomeUseCase>(provider => new HomeUseCase(servicesProvider.GetRequiredService<IEmpleadoRepository>()));
-
-            HomeUseCase homeUseCase = services.BuildServiceProvider().GetService<HomeUseCase>();
+            services.AddTransient<GoalUseCase>(provider => new GoalUseCase(servicesProvider.GetRequiredService<IGoalRepository>()));
 
             services.AddCors(options =>
               {
@@ -74,6 +80,8 @@ namespace MDT.AppService
             
             services.AddMvcCore()
                 .AddApiExplorer();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
