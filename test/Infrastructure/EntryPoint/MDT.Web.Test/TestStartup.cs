@@ -5,9 +5,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MDT.Model.Gateway;
-using MDT.UseCase;
+using MDT.UseCase.Goals;
 using MDT.MongoDb.Entities;
 using System;
+using MDT.AppService;
+using MDT.SupabaseDb.Entities;
+
 namespace MDT.Web.Test
 {
     public class TestStartup
@@ -24,26 +27,26 @@ namespace MDT.Web.Test
         public void ConfigureServices(IServiceCollection services)
         {
             var appSettings =  Configuration.GetSection("AppSettings").Get<TPMenuAppSetings>();
-            /*
-            var appSettings = new
-            {
-                TPMenuDatabaseString = "mongodb://127.0.0.1:27017",
-                DatabaseMenu = "mdt"
-            };
-            */
             var mongoKey = appSettings.TPMenuDatabaseString;
             var mongoConn = mongoKey;
             Console.Out.WriteLine(mongoKey + " ... " + appSettings.DatabaseMenu);
+
+            var supabaseSettings = Configuration.GetSection("SupabaseSettings").Get<SupabaseSettings>();
+            var supaApiKey = supabaseSettings.ApiKey;
+            var supaUrl = supabaseSettings.Url;
+
+            services.AddSingleton(provider => new Supabase.Client(supaUrl, supaApiKey));
+            services.AddSingleton<IGoalRepository, GoalAdapter>();
             services.AddScoped<IEmpleadoRepository>(provider =>
              new EmpleadoAdapter(mongoConn, $"{appSettings.DatabaseMenu}")
             );
 
-            services.BuildServiceProvider().GetService<IEmpleadoRepository>();
+            services.BuildServiceProvider().GetService<IGoalRepository>();
 
             var servicesProvider = services.BuildServiceProvider();
 
-            services.AddTransient<HomeUseCase>(
-                provider => new HomeUseCase(servicesProvider.GetRequiredService<IEmpleadoRepository>())
+            services.AddTransient<GoalUseCase>(
+                provider => new GoalUseCase(servicesProvider.GetRequiredService<IGoalRepository>())
             );
 
             services.AddCors(options =>
@@ -57,7 +60,7 @@ namespace MDT.Web.Test
                 });
             });
 
-            //services.AddTransient<HomeController>();
+            services.AddTransient<GoalController>();
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
@@ -65,7 +68,6 @@ namespace MDT.Web.Test
             });
 
             services.AddDataProtection();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddMvcCore().AddApiExplorer();
         }
 
@@ -78,13 +80,13 @@ namespace MDT.Web.Test
             else
             {
                 app.UseExceptionHandler("/Error");
-                app.UseHsts();
+               app.UseHsts();
             }
 
             app.UseCors(MyAllowSpecificOrigins);
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            app.UseMvc();
+            
         }
     }
 }

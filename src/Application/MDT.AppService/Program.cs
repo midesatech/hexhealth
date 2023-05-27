@@ -18,3 +18,5 @@ startup.Configure(app, app.Environment);
 
 app.MapControllers();
 app.Run();
+
+public partial class Program { }

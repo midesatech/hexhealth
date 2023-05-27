@@ -75,13 +75,8 @@ namespace MDT.AppService
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
-
-            
-            services.AddMvcCore()
-                .AddApiExplorer();
-
-
+                                    
+            services.AddMvcCore().AddApiExplorer();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

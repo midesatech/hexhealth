@@ -6,10 +6,14 @@ namespace MDT.Model.Gateway
 {
     public interface IGoalRepository
     {
-        Task<Goal> GetGoalById(string id);
+        Task<Goal> AddGoal(Goal goal);
+        Task<Goal> GetGoalById(int id);
 
         Task<List<Goal>> GetGoals();
 
-        Task<Goal> AddGoal(Goal goal);
+        Task<List<Goal>> GetGoalsByUser(string userId);
+        Task<Goal> UpdateGoal(Goal goal);
+        Task DeleteGoalById(int id);
+
     }
 }

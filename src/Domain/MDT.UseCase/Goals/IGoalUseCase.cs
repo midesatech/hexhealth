@@ -6,7 +6,11 @@ namespace MDT.UseCase.Goals
 {
     public interface IGoalUseCase
     {
-        Task<List<Goal>> GetGoals();
         Task<Goal> AddGoal(Goal goal);
+        Task<List<Goal>> GetGoals();
+        Task<List<Goal>> GetGoalsByUser(string userId);
+        Task<Goal> GetGoalById(int goalId);
+        Task<Goal> UpdateGoal(Goal goal);
+        Task DeleteGoalById(int goalId);
     }
 }

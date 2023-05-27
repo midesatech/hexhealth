@@ -34,9 +34,26 @@ namespace MDT.SupabaseDb.Entities
             return new Goal(result.Id, result.IdUser, result.Title, result.Description, result.DateInit, result.DateEnd, result.IsActive);
         }
 
-        public Task<Goal> GetGoalById(string id)
+        public async Task DeleteGoalById(int id)
         {
-            throw new NotImplementedException();
+            await supabaseClient
+                .From<GoalEntity>()
+                .Where(x => x.Id == id)
+                .Delete();
+        }
+
+        public async Task<Goal?> GetGoalById(int id)
+        {
+            var result = await supabaseClient.From<GoalEntity>()
+                .Where(x => x.Id == id)
+                .Single();
+
+            if (result != null)
+            {
+                return new Goal(result.Id, result.IdUser, result.Title, result.Description, result.DateInit, result.DateEnd, result.IsActive);
+            }
+
+            return null;
         }
 
         public async Task<List<Goal>> GetGoals()
@@ -49,5 +66,41 @@ namespace MDT.SupabaseDb.Entities
             });
             return goals;
         }
+
+        public async Task<List<Goal>> GetGoalsByUser(string userId)
+        {
+            var goals = new List<Goal>();
+
+            var response = await supabaseClient.From<GoalEntity>()
+                .Where(x => x.IdUser == userId)
+                .Get();
+            response.Models.ForEach(x => {
+                goals.Add(new Goal(x.Id, x.IdUser, x.Title, x.Description, x.DateInit, x.DateEnd, x.IsActive));
+            });
+            return goals;
+        }
+
+        public async Task<Goal> UpdateGoal(Goal goal)
+        {
+            var model = new GoalEntity
+            {
+                Id = goal.Id,
+                IdUser = goal.IdUser,
+                Title = goal.Title,
+                Description = goal.Description,
+                DateInit = goal.DateInit,
+                DateEnd = goal.DateEnd,
+                IsActive = goal.IsActive
+            };
+
+            var response = await supabaseClient
+                .From<GoalEntity>()
+                .Upsert(model, new QueryOptions { Returning = ReturnType.Representation });
+
+            var result = response.Model;
+            return new Goal(result.Id, result.IdUser, result.Title, result.Description, result.DateInit, result.DateEnd, result.IsActive);
+        }
     }
 }
+
+
