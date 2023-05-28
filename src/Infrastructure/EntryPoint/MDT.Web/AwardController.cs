@@ -1,5 +1,5 @@
 ﻿using MDT.Model.Data;
-using MDT.UseCase.Progress;
+using MDT.UseCase.Awards;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,160 +12,160 @@ namespace MDT.Web
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
     [EnableCors("AllowOrigin")]
-    public class ProgressController : ControllerBase
+    public class AwardController : ControllerBase
     {
-        private readonly IProgressUseCase progressUseCase;
-        
-        public ProgressController(IProgressUseCase progressUseCase)
+        private readonly IAwardUseCase awardUseCase;
+
+        public AwardController(IAwardUseCase awardUseCase)
         {
-            this.progressUseCase = progressUseCase;
+            this.awardUseCase = awardUseCase;
         }
 
 
         [HttpGet]
         [EnableCors("AllowOrigin")]
-        public async Task<IActionResult> GetAllProgress()
+        public async Task<IActionResult> GetAwards()
         {
-            var progress = new
+            var award = new
             {
-                progress = await progressUseCase.GetAllProgress()
+                award = await awardUseCase.GetAwards()
             };
 
-            return Ok(progress);
+            return Ok(award);
         }
 
 
         [HttpGet]
         [EnableCors("AllowOrigin")]
-        public async Task<IActionResult> GetProgressById(int progressId)
+        public async Task<IActionResult> GetAwardById(int awardId)
         {
             try
             {
-                if (progressId < 1)
+                if (awardId < 1)
                     return BadRequest();
 
-                var progress = new
+                var award = new
                 {
-                    progress = await progressUseCase.GetProgressById(progressId)
+                    award = await awardUseCase.GetAwardById(awardId)
                 };
 
-                return Ok(progress);
+                return Ok(award);
             }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retrieving progress record");
+                    "Error retrieving award record");
             }
         }
 
 
         [HttpGet]
         [EnableCors("AllowOrigin")]
-        public async Task<IActionResult> GetAllProgressByGoalId(long goalId)
+        public async Task<IActionResult> GetAwardsByGoalId(long goalId)
         {
             try
             {
                 if (goalId < 1)
                     return BadRequest();
 
-                var progress = new
+                var award = new
                 {
-                    progress = await progressUseCase.GetAllProgressByGoal(goalId)
+                    award = await awardUseCase.GetAwardsByGoal(goalId)
                 };
 
-                return Ok(progress);
+                return Ok(award);
             }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retrieving progress records by goalId");
+                    "Error retrieving award records by goalId");
             }
         }
 
 
         [HttpGet]
         [EnableCors("AllowOrigin")]
-        public async Task<IActionResult> GetAllProgressByUserId(string userId)
+        public async Task<IActionResult> GetAwardsByUserId(string userId)
         {
             try
             {
-                if (userId ==  null)
+                if (userId == null)
                     return BadRequest();
 
-                var progress = new
+                var award = new
                 {
-                    progress = await progressUseCase.GetAllProgressByUser(userId)
+                    award = await awardUseCase.GetAwardsByUser(userId)
                 };
 
-                return Ok(progress);
+                return Ok(award);
             }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retrieving progress records by userId");
+                    "Error retrieving award records by userId");
             }
         }
 
 
         [HttpPost]
         [EnableCors("AllowOrigin")]
-        public async Task<ActionResult<Progress>> CreateProgress([FromBody] Progress progress)
+        public async Task<ActionResult<Award>> CreateAward([FromBody] Award award)
         {
             try
             {
-                if (progress == null)
+                if (award == null)
                     return BadRequest();
 
-                var createdProgress = await progressUseCase.AddProgress(progress);
+                var createdAward = await awardUseCase.AddAward(award);
 
-                return createdProgress;
+                return createdAward;
             }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error creating new progress record");
+                    "Error creating new award record");
             }
         }
 
 
         [HttpPut]
         [EnableCors("AllowOrigin")]
-        public async Task<ActionResult<Progress>> UpdateProgress([FromBody] Progress progress)
+        public async Task<ActionResult<Award>> UpdateAward([FromBody] Award award)
         {
             try
             {
-                if (progress == null || progress.Id < 1)
+                if (award == null || award.Id < 1)
                     return BadRequest();
 
-                var updatedProgress = await progressUseCase.UpdateProgress(progress);
+                var updatedAward = await awardUseCase.UpdateAward(award);
 
-                return updatedProgress;
+                return updatedAward;
             }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error updating progress record");
+                    "Error updating award record");
             }
         }
 
 
         [HttpDelete]
         [EnableCors("AllowOrigin")]
-        public async Task<IActionResult> DeleteProgressById(int progressId)
+        public async Task<IActionResult> DeleteAwardById(int awardId)
         {
             try
             {
-                if (progressId < 1)
+                if (awardId < 1)
                     return BadRequest();
 
-                await progressUseCase.DeleteProgressById(progressId);
+                await awardUseCase.DeleteAwardById(awardId);
                 return Ok();
 
             }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error updating progress record");
+                    "Error updating award record");
             }
         }
     }

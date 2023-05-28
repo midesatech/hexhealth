@@ -3,24 +3,24 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MDT.UseCase.Progress
+namespace MDT.UseCase.Awards
 {
-    public class ProgressUseCase : IProgressUseCase
+    public class AwardUseCase : IAwardUseCase
     {
-        private readonly IProgressRepository _repository;
+        private readonly IAwardRepository _repository;
 
-        public ProgressUseCase(IProgressRepository repository)
+        public AwardUseCase(IAwardRepository repository)
         {
             _repository = repository;
         }
 
-        public Task<Model.Data.Progress> AddProgress(Model.Data.Progress progress)
+        public Task<Model.Data.Award> AddAward(Model.Data.Award award)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    return _repository.AddProgress(progress);
+                    return _repository.AddAward(award);
                 }
                 catch (Exception ex)
                 {
@@ -30,13 +30,13 @@ namespace MDT.UseCase.Progress
             });
         }
 
-        public Task DeleteProgressById(int progressId)
+        public Task DeleteAwardById(int awardId)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    return _repository.DeleteProgressById(progressId);
+                    return _repository.DeleteAwardById(awardId);
                 }
                 catch (Exception ex)
                 {
@@ -46,13 +46,13 @@ namespace MDT.UseCase.Progress
             });
         }
 
-        public Task<List<Model.Data.Progress>> GetAllProgress()
+        public Task<List<Model.Data.Award>> GetAwards()
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    return _repository.GetAllProgress(); 
+                    return _repository.GetAwards();
                 }
                 catch (Exception ex)
                 {
@@ -62,13 +62,13 @@ namespace MDT.UseCase.Progress
             });
         }
 
-        public Task<List<Model.Data.Progress>> GetAllProgressByGoal(long goalId)
+        public Task<List<Model.Data.Award>> GetAwardsByGoal(long goalId)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    return _repository.GetAllProgressByGoal(goalId);
+                    return _repository.GetAwardsByGoal(goalId);
                 }
                 catch (Exception ex)
                 {
@@ -78,13 +78,13 @@ namespace MDT.UseCase.Progress
             });
         }
 
-        public Task<Model.Data.Progress> GetProgressById(int id)
+        public Task<Model.Data.Award> GetAwardById(int id)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    return _repository.GetProgressById(id);
+                    return _repository.GetAwardById(id);
                 }
                 catch (Exception ex)
                 {
@@ -94,13 +94,13 @@ namespace MDT.UseCase.Progress
             });
         }
 
-        public Task<List<Model.Data.Progress>> GetAllProgressByUser(string userId)
+        public Task<List<Model.Data.Award>> GetAwardsByUser(string userId)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    return _repository.GetAllProgressByUser(userId);
+                    return _repository.GetAwardsByUser(userId);
                 }
                 catch (Exception ex)
                 {
@@ -110,13 +110,13 @@ namespace MDT.UseCase.Progress
             });
         }
 
-        public Task<Model.Data.Progress> UpdateProgress(Model.Data.Progress progress)
+        public Task<Model.Data.Award> UpdateAward(Model.Data.Award award)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    return _repository.UpdateProgress(progress);
+                    return _repository.UpdateAward(award);
                 }
                 catch (Exception ex)
                 {

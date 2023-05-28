@@ -7,7 +7,7 @@ using MDT.Model.Gateway;
 using MDT.SupabaseDb.Entities;
 using MDT.UseCase.Goals;
 using MDT.UseCase.Progress;
-using System;
+using MDT.UseCase.Awards;
 
 namespace MDT.AppService
 {
@@ -39,11 +39,13 @@ namespace MDT.AppService
             
             services.AddSingleton<IGoalRepository, GoalAdapter>();
             services.AddSingleton<IProgressRepository, ProgressAdapter>();
+            services.AddSingleton<IAwardRepository, AwardAdapter>();
 
             var servicesProvider = services.BuildServiceProvider();
 
             services.AddTransient<IGoalUseCase>(provider => new GoalUseCase(servicesProvider.GetRequiredService<IGoalRepository>()));
             services.AddTransient<IProgressUseCase>(provider => new ProgressUseCase(servicesProvider.GetRequiredService<IProgressRepository>()));
+            services.AddTransient<IAwardUseCase>(provider => new AwardUseCase(servicesProvider.GetRequiredService<IAwardRepository>()));
 
             services.AddCors(options =>
               {
