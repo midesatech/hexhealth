@@ -22,7 +22,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Domain\MDT.Model\MDT.Model.csproj" />
     <ProjectReference Include="..\..\..\src\Domain\MDT.UseCase\MDT.UseCase.csproj" />
-    <ProjectReference Include="..\..\..\src\Infrastructure\DrivenAdapter\MDT.MongoDb\MDT.MongoDb.csproj" />
   </ItemGroup>
 
 </Project>

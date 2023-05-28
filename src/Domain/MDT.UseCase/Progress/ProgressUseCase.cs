@@ -4,24 +4,24 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MDT.UseCase.Goals
+namespace MDT.UseCase.Progress
 {
-    public class GoalUseCase : IGoalUseCase
+    public class ProgressUseCase : IProgressUseCase
     {
-        private readonly IGoalRepository  _repository;
+        private readonly IProgressRepository _repository;
 
-        public GoalUseCase(IGoalRepository repository)
+        public ProgressUseCase(IProgressRepository repository)
         {
             _repository = repository;
         }
 
-        public Task<Goal> AddGoal(Goal goal)
+        public Task<Model.Data.Progress> AddProgress(Model.Data.Progress progress)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    return _repository.AddGoal(goal);
+                    return _repository.AddProgress(progress);
                 }
                 catch (Exception ex)
                 {
@@ -31,13 +31,13 @@ namespace MDT.UseCase.Goals
             });
         }
 
-        public Task DeleteGoalById(int goalId)
+        public Task DeleteProgressById(int progressId)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    return _repository.DeleteGoalById(goalId);
+                    return _repository.DeleteProgressById(progressId);
                 }
                 catch (Exception ex)
                 {
@@ -47,13 +47,13 @@ namespace MDT.UseCase.Goals
             });
         }
 
-        public Task<Goal> GetGoalById(int goalId)
+        public Task<List<Model.Data.Progress>> GetAllProgress()
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    return _repository.GetGoalById(goalId);
+                    return _repository.GetAllProgress(); 
                 }
                 catch (Exception ex)
                 {
@@ -63,13 +63,13 @@ namespace MDT.UseCase.Goals
             });
         }
 
-        public Task<List<Goal>> GetGoals()
+        public Task<List<Model.Data.Progress>> GetAllProgressByGoal(long goalId)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    return _repository.GetGoals(); 
+                    return _repository.GetAllProgressByGoal(goalId);
                 }
                 catch (Exception ex)
                 {
@@ -79,13 +79,13 @@ namespace MDT.UseCase.Goals
             });
         }
 
-        public Task<List<Goal>> GetGoalsByUser(string userId)
+        public Task<Model.Data.Progress> GetProgressById(int id)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    return _repository.GetGoalsByUser(userId); 
+                    return _repository.GetProgressById(id);
                 }
                 catch (Exception ex)
                 {
@@ -95,13 +95,13 @@ namespace MDT.UseCase.Goals
             });
         }
 
-        public Task<Goal> UpdateGoal(Goal goal)
+        public Task<List<Model.Data.Progress>> GetAllProgressByUser(string userId)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    return _repository.UpdateGoal(goal);
+                    return _repository.GetAllProgressByUser(userId);
                 }
                 catch (Exception ex)
                 {
@@ -111,5 +111,20 @@ namespace MDT.UseCase.Goals
             });
         }
 
+        public Task<Model.Data.Progress> UpdateProgress(Model.Data.Progress progress)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return _repository.UpdateProgress(progress);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw;
+                }
+            });
+        }
     }
 }

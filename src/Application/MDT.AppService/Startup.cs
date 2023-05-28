@@ -1,18 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MDT.Model.Data;
 using MDT.Model.Gateway;
-using MDT.MongoDb.Entities;
 using MDT.SupabaseDb.Entities;
-using MDT.UseCase;
 using MDT.UseCase.Goals;
+using MDT.UseCase.Progress;
 using System;
-using System.Runtime.CompilerServices;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace MDT.AppService
 {
@@ -32,14 +27,9 @@ namespace MDT.AppService
         public void ConfigureServices(IServiceCollection services)
         {
 
-            var appSettings = Configuration.GetSection("AppSettings").Get<TPMenuAppSetings>();
-            var mongoKey = appSettings.TPMenuDatabaseString;
-            var mongoConn = mongoKey;
             var supabaseSettings = Configuration.GetSection("SupabaseSettings").Get<SupabaseSettings>();
             var supaApiKey = supabaseSettings.ApiKey;
             var supaUrl = supabaseSettings.Url;
-
-            Console.Out.WriteLine(mongoKey + "|" + appSettings.DatabaseMenu);
 
             services.AddSingleton(provider => new Supabase.Client(supaUrl, supaApiKey));
 
@@ -47,16 +37,13 @@ namespace MDT.AppService
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             
-
-            services.AddScoped<IEmpleadoRepository>(provider =>
-             new EmpleadoAdapter(mongoConn, $"{appSettings.DatabaseMenu}")
-            );
-
             services.AddSingleton<IGoalRepository, GoalAdapter>();
+            services.AddSingleton<IProgressRepository, ProgressAdapter>();
 
             var servicesProvider = services.BuildServiceProvider();
 
-            services.AddTransient<GoalUseCase>(provider => new GoalUseCase(servicesProvider.GetRequiredService<IGoalRepository>()));
+            services.AddTransient<IGoalUseCase>(provider => new GoalUseCase(servicesProvider.GetRequiredService<IGoalRepository>()));
+            services.AddTransient<IProgressUseCase>(provider => new ProgressUseCase(servicesProvider.GetRequiredService<IProgressRepository>()));
 
             services.AddCors(options =>
               {

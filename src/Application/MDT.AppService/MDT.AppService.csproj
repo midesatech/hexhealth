@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\EntryPoint\MDT.Web\MDT.Web.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\DrivenAdapter\MDT.MongoDb\MDT.MongoDb.csproj" />
     <ProjectReference Include="..\..\Infrastructure\DrivenAdapter\MDT.SupabaseDb\MDT.SupabaseDb.csproj" />
     <ProjectReference Include="..\..\Domain\MDT.Model\MDT.Model.csproj" />
     <ProjectReference Include="..\..\Domain\MDT.UseCase\MDT.UseCase.csproj" />

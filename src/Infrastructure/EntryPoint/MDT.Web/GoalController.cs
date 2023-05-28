@@ -1,13 +1,9 @@
 ﻿using MDT.Model.Data;
-using MDT.UseCase;
 using MDT.UseCase.Goals;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MDT.Web
@@ -19,9 +15,9 @@ namespace MDT.Web
     public class GoalController : ControllerBase
     {
 
-        private readonly GoalUseCase goalUseCase;
+        private readonly IGoalUseCase goalUseCase;
 
-        public GoalController(GoalUseCase goalUseCase)
+        public GoalController(IGoalUseCase goalUseCase)
         {
             this.goalUseCase = goalUseCase;
         }
@@ -94,7 +90,8 @@ namespace MDT.Web
             }
         }
 
-        [HttpPost]
+
+        [HttpPut]
         [EnableCors("AllowOrigin")]
         public async Task<ActionResult<Goal>> UpdateGoal([FromBody] Goal goal)
         {
