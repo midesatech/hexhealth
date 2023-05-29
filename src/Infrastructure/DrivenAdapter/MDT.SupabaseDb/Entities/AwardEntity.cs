@@ -16,6 +16,9 @@ namespace MDT.SupabaseDb.Entities
             [Column("id_goal")]
             public Int64 IdGoal { get; set; }
 
+            [Column("description")]
+            public String Description { get; set; }
+
             [Column("given_at")]
             public DateTime GivenAt { get; set; }
 
