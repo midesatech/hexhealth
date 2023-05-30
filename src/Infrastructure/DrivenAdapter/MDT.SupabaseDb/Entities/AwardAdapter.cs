@@ -20,15 +20,16 @@ namespace MDT.SupabaseDb.Entities
             {
                 IdUser = award.IdUser,
                 IdGoal = award.IdGoal,
+                Title = award.Title,
                 Description = award.Description,
-                GivenAt = award.GivenAt
+                CreatedAt = award.CreatedAt
             };
             var response = await supabaseClient
                 .From<AwardEntity>()
                 .Insert(model, new QueryOptions { Returning = ReturnType.Representation });
 
             var result = response.Model;
-            return new Award(result.Id, result.IdGoal, result.IdUser, result.Description, result.GivenAt);
+            return new Award(result.Id, result.IdGoal, result.IdUser, result.Title, result.Description, result.CreatedAt);
         }
 
         public async Task DeleteAwardById(int id)
@@ -47,7 +48,7 @@ namespace MDT.SupabaseDb.Entities
 
             if (result != null)
             {
-                return new Award(result.Id, result.IdGoal, result.IdUser, result.Description, result.GivenAt);
+                return new Award(result.Id, result.IdGoal, result.IdUser, result.Title, result.Description, result.CreatedAt);
             }
 
             return null;
@@ -59,7 +60,7 @@ namespace MDT.SupabaseDb.Entities
 
             var response = await supabaseClient.From<AwardEntity>().Get();
             response.Models.ForEach(x => {
-                Award.Add(new Award(x.Id, x.IdGoal, x.IdUser, x.Description, x.GivenAt));
+                Award.Add(new Award(x.Id, x.IdGoal, x.IdUser, x.Title, x.Description, x.CreatedAt));
             });
             return Award;
         }
@@ -72,7 +73,7 @@ namespace MDT.SupabaseDb.Entities
                 .Where(x => x.IdUser == userId)
                 .Get();
             response.Models.ForEach(x => {
-                Award.Add(new Award(x.Id, x.IdGoal, x.IdUser, x.Description, x.GivenAt));
+                Award.Add(new Award(x.Id, x.IdGoal, x.IdUser, x.Title, x.Description, x.CreatedAt));
             });
             return Award;
         }
@@ -85,7 +86,7 @@ namespace MDT.SupabaseDb.Entities
                 .Where(x => x.IdGoal == goalId)
                 .Get();
             response.Models.ForEach(x => {
-                Award.Add(new Award(x.Id, x.IdGoal, x.IdUser, x.Description, x.GivenAt));
+                Award.Add(new Award(x.Id, x.IdGoal, x.IdUser, x.Title, x.Description, x.CreatedAt));
             });
             return Award;
         }
@@ -98,7 +99,8 @@ namespace MDT.SupabaseDb.Entities
                 IdUser = award.IdUser,
                 IdGoal = award.IdGoal,
                 Description = award.Description, 
-                GivenAt = award.GivenAt,
+                Title = award.Title,
+                CreatedAt = award.CreatedAt,
             };
 
             var response = await supabaseClient
@@ -106,7 +108,7 @@ namespace MDT.SupabaseDb.Entities
                 .Upsert(model, new QueryOptions { Returning = ReturnType.Representation });
 
             var result = response.Model;
-            return new Award(result.Id, result.IdGoal, result.IdUser, result.Description, result.GivenAt);
+            return new Award(result.Id, result.IdGoal, result.IdUser, result.Title, result.Description, result.CreatedAt);
         }
     }
 }

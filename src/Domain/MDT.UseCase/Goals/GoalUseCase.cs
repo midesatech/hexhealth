@@ -11,11 +11,13 @@ namespace MDT.UseCase.Goals
     {
         private readonly IGoalRepository  _goalRepository;
         private readonly IProgressRepository _progressRepository;
+        private readonly IAwardRepository _awardRepository;
 
-        public GoalUseCase(IGoalRepository repository, IProgressRepository progressRepository)
+        public GoalUseCase(IGoalRepository repository, IProgressRepository progressRepository, IAwardRepository awardRepository)
         {
             _goalRepository = repository;
             _progressRepository = progressRepository;   
+            _awardRepository = awardRepository;
         }
 
         public Task<Goal> AddGoal(Goal goal)
@@ -150,12 +152,32 @@ namespace MDT.UseCase.Goals
                     if (isDone)
                     {
                         goalsAchieved++;
+                        CreateAward(item);
                     }
 
                 });
 
                 return new GoalStatus(userId, totalGoals, goalsAchieved, totalGoals - goalsAchieved, goalsProgress);
             });            
+
+        }
+
+        private void CreateAward(Goal goal)
+        {
+            //Find award
+
+            Task.Run(() =>
+            {
+                var currentAwards = _awardRepository.GetAwardsByGoal(goal.Id);
+
+                    var award = currentAwards.Result.Find(x => x.IdGoal == goal.Id);
+                    if (award == null)
+                    {
+                        _awardRepository.AddAward(new Award(0, goal.Id, goal.IdUser, "Award!", "Lograste un premio por completar tu meta: " + goal.Title, DateTime.Now));
+                    }
+
+            });
+
 
         }
 

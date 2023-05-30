@@ -19,8 +19,8 @@ namespace MDT.SupabaseDb.Entities
             [Column("description")]
             public String Description { get; set; }
 
-            [Column("given_at")]
-            public DateTime GivenAt { get; set; }
+            [Column("title")]
+            public String Title { get; set; }
 
             [Column("created_at", ignoreOnInsert: true)]
             public DateTime CreatedAt { get; set; }

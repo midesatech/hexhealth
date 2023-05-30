@@ -8,15 +8,18 @@ namespace MDT.Model.Data
         public Int64 IdGoal { get; private set; }
         public String IdUser { get; private set; }
         public String Description { get; private set; }
-        public DateTime GivenAt { get; private set; }
 
-        public Award(Int64 id, Int64 idGoal, String idUser, String description, DateTime givenAt)
+        public String Title { get; private set; }
+        public DateTime CreatedAt { get; private set; }
+
+        public Award(Int64 id, Int64 idGoal, String idUser, String title, String description, DateTime createdAt)
         {
             this.Id = id;
             this.IdGoal = idGoal;
             this.IdUser = idUser;
+            this.Title = title;
             this.Description = description;
-            this.GivenAt = givenAt;
+            this.CreatedAt = createdAt;
         }
     }
 }
