@@ -1,12 +1,13 @@
 # MDT -Domain Driven Design- Application
 
-Domain Driven Design Net is a RESTful API service developed in .Net Core 2.2
+- Domain Driven Design Net is a RESTful API service developed in .Net Core 6 LTS
+- Design using hexagonal architecture
 
 ## Tools for compiling
 
-Linux:
+Download Linux/Windows SDK from:
 
-* [.NET Core Runtime](https://dotnet.microsoft.com/download/linux-package-manager/ubuntu18-04/runtime-current) - V. 2.2
+* [.NET Core Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) - V. 6.0.16
 
 
 ## Steps for build
@@ -25,25 +26,21 @@ dotnet build
 From command line, within root folder you can execute next command:
 
 ```
-dotnet run --project src/Applications/MDT.AppServices/MDT.AppServices.csproj 
+dotnet run --project src/Application/MDT.AppService/MDT.AppService.csproj 
 ```
 
-If the the project is running ok, then you would see the following logs in command line:
+If the project is running ok, then you would see the following log in command line:
 
 ```
-mongodb://127.0.0.1:27017|mdt
-Hosting environment: Production
-Content root path: /home/tuxito/DevJ/NetCore/DomanDrivenDesignNet/src/Application/MDT.AppService
-Now listening on: http://localhost:5000
-Now listening on: https://localhost:5001
+
 Application started. Press Ctrl+C to shut down.
 ```
 
-And to end, you can open a brownser and navigate to following address:
+Finally, you can open a brownser and navigate to following address to review Swagger API definitions:
 
 
 ```
-http://localhost:5000
+https://localhost:54212/swagger/index.html
 ```
 
 
@@ -56,4 +53,4 @@ dotnet test
 
 ## Built-in
 
-* [.NET Core](https://dotnet.microsoft.com/download) - V. 2.2
+* [.NET Core](https://dotnet.microsoft.com/download)
