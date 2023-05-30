@@ -43,7 +43,7 @@ namespace MDT.AppService
 
             var servicesProvider = services.BuildServiceProvider();
 
-            services.AddTransient<IGoalUseCase>(provider => new GoalUseCase(servicesProvider.GetRequiredService<IGoalRepository>()));
+            services.AddTransient<IGoalUseCase>(provider => new GoalUseCase(servicesProvider.GetRequiredService<IGoalRepository>(), servicesProvider.GetRequiredService<IProgressRepository>()));
             services.AddTransient<IProgressUseCase>(provider => new ProgressUseCase(servicesProvider.GetRequiredService<IProgressRepository>()));
             services.AddTransient<IAwardUseCase>(provider => new AwardUseCase(servicesProvider.GetRequiredService<IAwardRepository>()));
 

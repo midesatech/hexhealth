@@ -6,10 +6,14 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
    <SonarQubeTestProject>true</SonarQubeTestProject>
     <ProjectGuid>{6224c484-3e23-4f06-a749-195c1e478110}</ProjectGuid>
+    <UserSecretsId>1c9ead71-93f0-43e2-a40b-5f02e00699cd</UserSecretsId>
+    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+    <DockerfileContext>..\..\..</DockerfileContext>
   </PropertyGroup>
 
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
     <PackageReference Include="supabase-csharp" Version="0.11.0" />
   </ItemGroup>
 

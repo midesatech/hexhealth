@@ -16,8 +16,14 @@ namespace MDT.SupabaseDb.Entities
         [Column("id_goal")]
         public Int64 IdGoal { get; set; }
 
-        [Column("taken_at")]
-        public DateTime TakenAt { get; set; }
+        [Column("title")]
+        public String Title { get; set; }
+
+        [Column("description")]
+        public String Description { get; set; }
+
+        [Column("isDone")]
+        public bool IsDone { get; set; }
 
         [Column("created_at", ignoreOnInsert: true)]
         public DateTime CreatedAt { get; set; }

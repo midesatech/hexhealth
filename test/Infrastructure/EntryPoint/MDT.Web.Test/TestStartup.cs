@@ -36,7 +36,7 @@ namespace MDT.Web.Test
             var servicesProvider = services.BuildServiceProvider();
 
             services.AddTransient<GoalUseCase>(
-                provider => new GoalUseCase(servicesProvider.GetRequiredService<IGoalRepository>())
+                provider => new GoalUseCase(servicesProvider.GetRequiredService<IGoalRepository>(), servicesProvider.GetRequiredService<IProgressRepository>())
             );
 
             services.AddCors(options =>

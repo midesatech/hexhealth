@@ -31,7 +31,7 @@ namespace MDT.SupabaseDb.Entities
                 .Insert(model, new QueryOptions { Returning = ReturnType.Representation });
 
             var result = response.Model;
-            return new Goal(result.Id, result.IdUser, result.Title, result.Description, result.DateInit, result.DateEnd, result.IsActive);
+            return new Goal(result.Id, result.IdUser, result.Title, result.Description, result.DateInit, result.DateEnd, result.IsActive, false);
         }
 
         public async Task DeleteGoalById(int id)
@@ -50,7 +50,7 @@ namespace MDT.SupabaseDb.Entities
 
             if (result != null)
             {
-                return new Goal(result.Id, result.IdUser, result.Title, result.Description, result.DateInit, result.DateEnd, result.IsActive);
+                return new Goal(result.Id, result.IdUser, result.Title, result.Description, result.DateInit, result.DateEnd, result.IsActive, false);
             }
 
             return null;
@@ -62,7 +62,7 @@ namespace MDT.SupabaseDb.Entities
 
             var response = await supabaseClient.From<GoalEntity>().Get();
             response.Models.ForEach(x => {
-                goals.Add(new Goal(x.Id, x.IdUser, x.Title, x.Description, x.DateInit, x.DateEnd, x.IsActive));                
+                goals.Add(new Goal(x.Id, x.IdUser, x.Title, x.Description, x.DateInit, x.DateEnd, x.IsActive, false));                
             });
             return goals;
         }
@@ -75,7 +75,7 @@ namespace MDT.SupabaseDb.Entities
                 .Where(x => x.IdUser == userId)
                 .Get();
             response.Models.ForEach(x => {
-                goals.Add(new Goal(x.Id, x.IdUser, x.Title, x.Description, x.DateInit, x.DateEnd, x.IsActive));
+                goals.Add(new Goal(x.Id, x.IdUser, x.Title, x.Description, x.DateInit, x.DateEnd, x.IsActive, false));
             });
             return goals;
         }
@@ -98,7 +98,7 @@ namespace MDT.SupabaseDb.Entities
                 .Upsert(model, new QueryOptions { Returning = ReturnType.Representation });
 
             var result = response.Model;
-            return new Goal(result.Id, result.IdUser, result.Title, result.Description, result.DateInit, result.DateEnd, result.IsActive);
+            return new Goal(result.Id, result.IdUser, result.Title, result.Description, result.DateInit, result.DateEnd, result.IsActive, false);
         }
     }
 }

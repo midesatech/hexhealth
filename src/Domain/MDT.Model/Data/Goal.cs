@@ -10,9 +10,10 @@ namespace MDT.Model.Data
         public String Title { get; private set; }
         public String Description { get; private set; }
         public Boolean IsActive { get; private set; }
+        public Boolean IsDone { get; private set; }
         public DateTime DateInit { get; private set; }
         public DateTime DateEnd { get; private set; }
-        public Goal(Int32 id, String iduser, String Title, String Description, DateTime dateinit, DateTime dateend, Boolean isactive) {
+        public Goal(Int32 id, String iduser, String Title, String Description, DateTime dateinit, DateTime dateend, Boolean isactive, Boolean isdone) {
             this.Id = id;
             this.IdUser = iduser;
             this.Title = Title;
@@ -20,6 +21,7 @@ namespace MDT.Model.Data
             this.DateInit = dateinit;
             this.DateEnd = dateend;
             this.IsActive = isactive;
+            this.IsDone = isdone;
         }   
 
     }

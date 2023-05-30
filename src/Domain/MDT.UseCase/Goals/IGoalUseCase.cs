@@ -12,5 +12,6 @@ namespace MDT.UseCase.Goals
         Task<Goal> GetGoalById(int goalId);
         Task<Goal> UpdateGoal(Goal goal);
         Task DeleteGoalById(int goalId);
+        Task<GoalStatus> GetGoalStatusByUser(string userId);
     }
 }

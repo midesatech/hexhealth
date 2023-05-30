@@ -70,6 +70,20 @@ namespace MDT.Web
         }
 
 
+        [HttpGet]
+        [EnableCors("AllowOrigin")]
+        public async Task<IActionResult> GetGoalsStatusByUserId(string userId)
+        {
+            var goals = new
+            {
+                goals = await goalUseCase.GetGoalStatusByUser(userId)
+            };
+
+            return Ok(goals);
+        }
+
+
+
         [HttpPost]
         [EnableCors("AllowOrigin")]
         public async Task<ActionResult<Goal>> CreateGoal([FromBody] Goal goal)

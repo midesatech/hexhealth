@@ -2,17 +2,20 @@
 using MDT.Model.Gateway;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MDT.UseCase.Goals
 {
     public class GoalUseCase : IGoalUseCase
     {
-        private readonly IGoalRepository  _repository;
+        private readonly IGoalRepository  _goalRepository;
+        private readonly IProgressRepository _progressRepository;
 
-        public GoalUseCase(IGoalRepository repository)
+        public GoalUseCase(IGoalRepository repository, IProgressRepository progressRepository)
         {
-            _repository = repository;
+            _goalRepository = repository;
+            _progressRepository = progressRepository;   
         }
 
         public Task<Goal> AddGoal(Goal goal)
@@ -21,7 +24,7 @@ namespace MDT.UseCase.Goals
             {
                 try
                 {
-                    return _repository.AddGoal(goal);
+                    return _goalRepository.AddGoal(goal);
                 }
                 catch (Exception ex)
                 {
@@ -37,7 +40,7 @@ namespace MDT.UseCase.Goals
             {
                 try
                 {
-                    return _repository.DeleteGoalById(goalId);
+                    return _goalRepository.DeleteGoalById(goalId);
                 }
                 catch (Exception ex)
                 {
@@ -53,7 +56,7 @@ namespace MDT.UseCase.Goals
             {
                 try
                 {
-                    return _repository.GetGoalById(goalId);
+                    return _goalRepository.GetGoalById(goalId);
                 }
                 catch (Exception ex)
                 {
@@ -69,7 +72,7 @@ namespace MDT.UseCase.Goals
             {
                 try
                 {
-                    return _repository.GetGoals(); 
+                    return _goalRepository.GetGoals(); 
                 }
                 catch (Exception ex)
                 {
@@ -85,7 +88,19 @@ namespace MDT.UseCase.Goals
             {
                 try
                 {
-                    return _repository.GetGoalsByUser(userId); 
+                    var goalsProgress = GetGoalStatusByUser(userId).Result;
+
+                    var currentGoals = _goalRepository.GetGoalsByUser(userId);
+
+                    List<Goal> result = new List<Goal>();
+
+                    currentGoals.Result.ForEach(goal => {
+                        var progress = goalsProgress.GoalsStatus.Find(x => x.Id == goal.Id).Progress == 100 ? true: false;  
+                        result.Add(
+                            new Goal(goal.Id, goal.IdUser, goal.Title, goal.Description, goal.DateInit, goal.DateEnd, goal.IsActive, progress));
+                    });
+
+                    return result;                     
                 }
                 catch (Exception ex)
                 {
@@ -101,7 +116,7 @@ namespace MDT.UseCase.Goals
             {
                 try
                 {
-                    return _repository.UpdateGoal(goal);
+                    return _goalRepository.UpdateGoal(goal);
                 }
                 catch (Exception ex)
                 {
@@ -109,6 +124,39 @@ namespace MDT.UseCase.Goals
                     throw;
                 }
             });
+        }
+
+
+        public Task<GoalStatus> GetGoalStatusByUser(string userId)
+        {
+            return Task.Run(() => {
+                var goals = _goalRepository.GetGoalsByUser(userId);
+
+
+                var totalGoals = goals.Result.Count;
+                var goalsProgress = new List<GoalProgress>();
+
+                var goalsAchieved = 0;
+
+                goals.Result.ForEach(item => {
+                    var diff = (item.DateEnd - item.DateInit).Days + 1;
+
+                    var progress = _progressRepository.GetAllProgressByGoal(item.Id).Result.GroupBy(g => g.CreatedAt.Day);
+                    var progressCount = progress.Count();
+                    var percentage = (progressCount * 100) / diff;
+                    var isDone = percentage == 100;
+                    goalsProgress.Add(new GoalProgress(item.Id, percentage, isDone, item.Title, item.Description));
+
+                    if (isDone)
+                    {
+                        goalsAchieved++;
+                    }
+
+                });
+
+                return new GoalStatus(userId, totalGoals, goalsAchieved, totalGoals - goalsAchieved, goalsProgress);
+            });            
+
         }
 
     }

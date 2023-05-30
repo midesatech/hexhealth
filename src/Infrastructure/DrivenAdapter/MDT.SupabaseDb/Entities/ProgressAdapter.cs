@@ -20,14 +20,17 @@ namespace MDT.SupabaseDb.Entities
             {
                 IdUser = progress.IdUser,
                 IdGoal = progress.IdGoal,
-                TakenAt = progress.TakenAt
+                Title = progress.Title,
+                Description = progress.Description,
+                IsDone = progress.IsDone,
+                CreatedAt = progress.CreatedAt
             };
             var response = await supabaseClient
                 .From<ProgressEntity>()
                 .Insert(model, new QueryOptions { Returning = ReturnType.Representation });
 
             var result = response.Model;
-            return new Progress(result.Id, result.IdGoal, result.IdUser, result.TakenAt);
+            return new Progress(result.Id, result.IdGoal, result.IdUser, result.Title, result.Description, result.IsDone, result.CreatedAt);
         }
 
         public async Task DeleteProgressById(int id)
@@ -46,7 +49,7 @@ namespace MDT.SupabaseDb.Entities
 
             if (result != null)
             {
-                return new Progress(result.Id, result.IdGoal, result.IdUser, result.TakenAt);
+                return new Progress(result.Id, result.IdGoal, result.IdUser, result.Title, result.Description, result.IsDone, result.CreatedAt);
             }
 
             return null;
@@ -58,7 +61,7 @@ namespace MDT.SupabaseDb.Entities
 
             var response = await supabaseClient.From<ProgressEntity>().Get();
             response.Models.ForEach(x => {
-                progress.Add(new Progress(x.Id, x.IdGoal, x.IdUser, x.TakenAt));
+                progress.Add(new Progress(x.Id, x.IdGoal, x.IdUser, x.Title, x.Description, x.IsDone, x.CreatedAt));
             });
             return progress;
         }
@@ -71,7 +74,7 @@ namespace MDT.SupabaseDb.Entities
                 .Where(x => x.IdUser == userId)
                 .Get();
             response.Models.ForEach(x => {
-                progress.Add(new Progress(x.Id, x.IdGoal, x.IdUser, x.TakenAt));
+                progress.Add(new Progress(x.Id, x.IdGoal, x.IdUser, x.Title, x.Description, x.IsDone, x.CreatedAt));
             });
             return progress;
         }
@@ -84,7 +87,7 @@ namespace MDT.SupabaseDb.Entities
                 .Where(x => x.IdGoal == goalId)
                 .Get();
             response.Models.ForEach(x => {
-                progress.Add(new Progress(x.Id, x.IdGoal, x.IdUser, x.TakenAt));
+                progress.Add(new Progress(x.Id, x.IdGoal, x.IdUser, x.Title, x.Description, x.IsDone, x.CreatedAt));
             });
             return progress;
         }
@@ -96,7 +99,10 @@ namespace MDT.SupabaseDb.Entities
                 Id = progress.Id,
                 IdUser = progress.IdUser,
                 IdGoal = progress.IdGoal,
-                TakenAt = progress.TakenAt,
+                Title = progress.Title,
+                Description = progress.Description,
+                IsDone = progress.IsDone,
+                CreatedAt = progress.CreatedAt
             };
 
             var response = await supabaseClient
@@ -104,7 +110,7 @@ namespace MDT.SupabaseDb.Entities
                 .Upsert(model, new QueryOptions { Returning = ReturnType.Representation });
 
             var result = response.Model;
-            return new Progress(result.Id, result.IdGoal, result.IdUser, result.TakenAt);
+            return new Progress(result.Id, result.IdGoal, result.IdUser, result.Title, result.Description, result.IsDone, result.CreatedAt);
         }  
     }
 }
